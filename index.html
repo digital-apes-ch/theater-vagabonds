@@ -8,26 +8,93 @@
   </head>
   <body>
     <header class="hero">
+      <div class="hero__brand">
+        <img
+          src="source/LOGO_Vagabunden.png"
+          alt="Theater Vagabunden Logo"
+        />
+      </div>
       <div class="hero__inner">
-        <p class="eyebrow">Freies Ensemble</p>
+        <p class="eyebrow">Theaterverein aus Tuggen</p>
         <h1>Theater Vagabunden</h1>
         <p class="lead">
           Zeitgenössisches Theater mit Herz, Haltung und Humor. Wir erzählen
-          Geschichten, die bewegen – auf allen Bühnen der Stadt.
+          Geschichten, die bewegen.
         </p>
-        <a class="cta" href="#kontakt">Kontakt aufnehmen</a>
+        <a class="cta" href="#nextshow">Tickets erwerben</a>
       </div>
     </header>
+
+    <section class="section" id="bildkarussell">
+      <div class="section__inner carousel">
+        <button class="carousel__control prev" aria-label="Vorheriges Bild">
+          &#10094;
+        </button>
+        <div class="carousel__track">
+          <div class="carousel__slides">
+            <img
+              src="source/Carussell-Top/50281081953_9878e1241d_b.jpg"
+              alt="Theaterimpression 1"
+            />
+            <img
+              src="source/Carussell-Top/50281082528_e49285a558_b.jpg"
+              alt="Theaterimpression 2"
+            />
+            <img
+              src="source/Carussell-Top/50281093938_0ed8287067_b.jpg"
+              alt="Theaterimpression 3"
+            />
+            <img
+              src="source/Carussell-Top/50281354916_3d4bb0f75b_b.jpg"
+              alt="Theaterimpression 4"
+            />
+            <img
+              src="source/Carussell-Top/50281489542_c5e262e188_b.jpg"
+              alt="Theaterimpression 5"
+            />
+            <img
+              src="source/Carussell-Top/50281775971_fbcc89e67f_b.jpg"
+              alt="Theaterimpression 6"
+            />
+            <img
+              src="source/Carussell-Top/50282013547_bf7b99efb9_b.jpg"
+              alt="Theaterimpression 7"
+            />
+            <img
+              src="source/Carussell-Top/50282013952_51c2a8e30b_b.jpg"
+              alt="Theaterimpression 8"
+            />
+          </div>
+        </div>
+        <button class="carousel__control next" aria-label="Nächstes Bild">
+          &#10095;
+        </button>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="nextshow">
+      <div class="section__inner">
+        <p class="eyebrow">Termine</p>
+        <h2>Aktuelle Produktionen</h2>
+        <div class="shows">
+          <article>
+            <h3>Unbekannt</h3>
+            <p>Wird noch bekannt gegegeben nach der Rollenverteilung</p>
+            <p class="meta">Premiere: Frühjahr 2026</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
     <section class="section" id="ensemble">
       <div class="section__inner grid">
         <div>
-          <p class="eyebrow">Ensemble</p>
+          <!--<p class="eyebrow">Ensemble</p>-->
           <h2>Menschen hinter dem Vorhang</h2>
           <p>
             Wir sind eine Gruppe von Theatermacherinnen und -machern, die
             gemeinsam neue Perspektiven auf die Bühne bringen. Unsere Produktionen
-            entstehen kollaborativ, politisch und poetisch.
+            entstehen kollaborativ, lokal und poetisch.
           </p>
         </div>
         <ul class="card-list">
@@ -47,10 +114,10 @@
       </div>
     </section>
 
-    <section class="section section--alt" id="termine">
+    <section class="section section--alt" id="oldproductions">
       <div class="section__inner">
-        <p class="eyebrow">Termine</p>
-        <h2>Aktuelle Produktionen</h2>
+        <p class="eyebrow">Historie</p>
+        <h2>Vergangene Produktionen</h2>
         <div class="shows">
           <article>
             <h3>Stadtlichter</h3>
@@ -107,6 +174,41 @@
 
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      const slides = document.querySelector(".carousel__slides");
+      const prev = document.querySelector(".carousel__control.prev");
+      const next = document.querySelector(".carousel__control.next");
+      const totalSlides = slides?.children.length || 0;
+      let index = 0;
+
+      const updateCarousel = () => {
+        if (!slides) return;
+        slides.style.transform = `translateX(-${index * 100}%)`;
+      };
+
+      prev?.addEventListener("click", () => {
+        index = (index - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+      });
+
+      next?.addEventListener("click", () => {
+        index = (index + 1) % totalSlides;
+        updateCarousel();
+      });
+
+      let autoSlide = setInterval(() => {
+        next?.click();
+      }, 2000);
+
+      const carousel = document.getElementById("bildkarussell");
+
+      carousel?.addEventListener("mouseenter", () => {
+        clearInterval(autoSlide);
+      });
+
+      carousel?.addEventListener("mouseleave", () => {
+        autoSlide = setInterval(() => next?.click(), 2000);
+      });
     </script>
   </body>
 </html>
