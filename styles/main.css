@@ -25,11 +25,11 @@ a {
 }
 
 .hero {
-  min-height: 80vh;
+  min-height: 56vh;
   display: flex;
   align-items: center;
   background: radial-gradient(circle at 20% 20%, #6c3a1c, #3b1d0c 65%, #1d0b04 100%);
-  padding: 4rem 1.5rem 6rem;
+  padding: 3rem 1.5rem 4rem;
   color: #f8e9d3;
   position: relative;
 }
@@ -65,8 +65,8 @@ a {
 }
 
 .hero .cta {
-  background: #f2c27c;
-  color: #2b1207;
+  background: #111118;
+  color: #fff;
   box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35);
 }
 
@@ -192,6 +192,7 @@ h3 {
 
 #bildkarussell {
   padding: 0;
+  background: #111118;
 }
 
 #bildkarussell .section__inner {
@@ -200,9 +201,19 @@ h3 {
 }
 
 #ensemble,
-#uns {
+#uns,
+#oldproductions {
   background: radial-gradient(circle at 20% 20%, #6c3a1c, #3b1d0c 65%, #1d0b04 100%);
+  background-attachment: fixed;
   color: #f8e9d3;
+}
+
+#uns {
+  padding-bottom: 7rem;
+}
+
+#ensemble {
+  padding-top: 7rem;
 }
 
 #ensemble .card-list li {
