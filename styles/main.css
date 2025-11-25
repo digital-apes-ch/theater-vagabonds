@@ -234,6 +234,16 @@ text-decoration: none;
   align-items: start;
 }
 
+#kontakt .grid {
+  align-items: center;
+}
+
+#kontakt .grid > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .card-list {
   list-style: none;
   padding: 0;
