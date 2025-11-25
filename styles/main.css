@@ -263,9 +263,39 @@ text-decoration: none;
   padding: 1.5rem;
   border-radius: 1rem;
   background: rgba(255, 255, 255, 0.07);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.shows article > div {
+  flex: 1;
 }
 
 .shows .meta {
+  color: rgba(245, 244, 241, 0.7);
+  font-size: 0.9rem;
+}
+
+.shows article .cta {
+  flex-shrink: 0;
+  margin-top: 0;
+  display: inline-block;
+}
+
+.old-shows {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.old-shows article {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.old-shows .meta {
   color: rgba(245, 244, 241, 0.7);
   font-size: 0.9rem;
 }
@@ -311,6 +341,7 @@ text-decoration: none;
   }
 
   .shows article,
+  .old-shows article,
   .contact-list li {
     padding: 1.25rem;
   }
