@@ -25,13 +25,18 @@ a {
 }
 
 .hero {
-  min-height: 50vh;
+  min-height: 40vh;
   display: flex;
   align-items: center;
   background: radial-gradient(circle at 20% 20%, #6c3a1c, #3b1d0c 65%, #1d0b04 100%);
   padding: 3rem 1.5rem 4rem;
   color: #f8e9d3;
   position: relative;
+}
+
+.hero--small {
+  min-height: 25vh;
+  padding: 2rem 1.5rem;
 }
 
 .hero__brand {
@@ -191,13 +196,17 @@ h3 {
 }
 
 #bildkarussell {
-  padding: 0;
+  padding-top: 8.5rem;
   background: #111118;
 }
 
 #bildkarussell .section__inner {
   max-width: 1100px;
   margin: 0 auto;
+}
+
+#nextshow {
+  padding-bottom: 10rem;
 }
 
 #ensemble,
@@ -222,9 +231,22 @@ h3 {
   color: #f8e9d3;
 }
 
+.members-subtitle {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  color: rgba(248, 233, 211, 0.85);
+  font-weight: 500;
+}
+
+.members-grid + .members-subtitle {
+  margin-top: 3rem;
+}
+
 .members-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 2rem;
   max-width: 1100px;
   margin: 0 auto;
@@ -236,6 +258,8 @@ h3 {
   border-radius: 1rem;
   background: rgba(255, 255, 255, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 198px;
+  flex-shrink: 0;
 }
 
 .member-card:hover {
@@ -428,6 +452,41 @@ text-decoration: none;
   flex-wrap: wrap;
   gap: 1rem;
   font-size: 0.95rem;
+}
+
+.footer a {
+  color: #b5b5b9;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #f5f4f1;
+}
+
+.impressum-content {
+  display: grid;
+  gap: 2rem;
+}
+
+.impressum-block h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: #f5f4f1;
+}
+
+.impressum-block p {
+  color: rgba(245, 244, 241, 0.85);
+  line-height: 1.7;
+}
+
+.impressum-block a {
+  color: #f5f4f1;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.impressum-block a:hover {
+  text-decoration: none;
 }
 
 @media (max-width: 600px) {
