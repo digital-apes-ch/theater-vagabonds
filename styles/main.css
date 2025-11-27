@@ -1,7 +1,7 @@
 :root {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #0b0b10;
-  background-color: #f5f4f1;
+  background-color: #0b0b10;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -14,11 +14,16 @@
   box-sizing: border-box;
 }
 
+html {
+  background: #0b0b10;
+}
+
 body {
   margin: 0;
-  background: #16171b;
+  background: #0b0b10;
   color: #16171b;
 }
+
 
 a {
   color: inherit;
@@ -489,7 +494,7 @@ text-decoration: none;
   text-decoration: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .hero {
     padding-top: 8rem;
     flex-direction: column;
@@ -526,6 +531,20 @@ text-decoration: none;
   .old-shows article,
   .contact-list li {
     padding: 1.25rem;
+  }
+
+  #bildkarussell {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #bildkarussell .section__inner {
+    max-width: none;
+    margin: 0;
+  }
+
+  .carousel__slides img {
+    border-radius: 0;
   }
 }
 
