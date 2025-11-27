@@ -491,7 +491,31 @@ text-decoration: none;
 
 @media (max-width: 600px) {
   .hero {
-    padding-top: 3rem;
+    padding-top: 8rem;
+    flex-direction: column;
+  }
+
+  .hero__brand {
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .hero__brand img {
+    width: 100px;
+  }
+
+  .hero__inner {
+    padding-top: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero .lead {
+    font-size: 1rem;
   }
 
   .design-embed {
