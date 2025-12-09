@@ -250,6 +250,43 @@ h3 {
   padding-bottom: 7rem;
 }
 
+.about-card {
+  width: 100%;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  background: rgba(17, 17, 24, 0.75);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.about-card h2 {
+  margin-top: 0;
+  color: #f8e9d3;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.about-card p {
+  color: rgba(248, 233, 211, 0.95);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.about-card p:last-child {
+  margin-bottom: 0;
+}
+
+.about-card strong {
+  color: #f8e9d3;
+  font-weight: 600;
+}
+
 #ensemble {
   padding-top: 5rem;
 }
@@ -652,6 +689,14 @@ text-decoration: none;
   .old-shows.expanded article .cta {
     margin-top: 0;
     align-self: center;
+  }
+
+  .about-card {
+    padding: 1.5rem;
+  }
+
+  .about-card h2 {
+    font-size: 1.5rem;
   }
 }
 
