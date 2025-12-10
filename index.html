@@ -18,10 +18,9 @@
       <div class="hero__inner">
         <h1>Theatervagabunden Tuggen</h1>
         <p class="lead">
-          Zeitgenössisches Theater mit Herz, Haltung und Humor. Wir erzählen
-          Geschichten, die bewegen.
+          Wir spielen bodenständige, urchige, unterhaltsame und humorvolle Theaterstücke.
         </p>
-        <a class="cta" href="#nextshow">Tickets erwerben</a>
+        <a class="cta" href="#nextshow" id="ticketsBtn">Tickets erwerben</a>
       </div>
     </header>
 
@@ -580,6 +579,38 @@
         } else {
           oldShows?.classList.add("expanded");
           toggleButton.textContent = "Weniger anzeigen";
+        }
+      });
+
+      // Scroll zur nextshow Sektion mit vertikaler Zentrierung
+      const ticketsBtn = document.getElementById("ticketsBtn");
+      const nextShowSection = document.getElementById("nextshow");
+
+      ticketsBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (nextShowSection) {
+          const viewportHeight = window.innerHeight;
+          const sectionHeight = nextShowSection.offsetHeight;
+          const sectionTop = nextShowSection.offsetTop;
+          const isMobile = window.innerWidth <= 768;
+          
+          // Berechne Scroll-Position, damit die Sektion vertikal zentriert ist
+          // Auf mobilen Geräten: immer zum Anfang scrollen, damit Content nicht weggeschnitten wird
+          // Auf Desktop: Sektion vertikal zentrieren
+          let scrollPosition;
+          
+          if (isMobile || sectionHeight > viewportHeight) {
+            // Mobile oder Sektion höher als Viewport - scroll zum Anfang (responsive für Handy)
+            scrollPosition = sectionTop;
+          } else {
+            // Desktop: Sektion ist kleiner als Viewport - vertikal zentrieren
+            scrollPosition = sectionTop - (viewportHeight - sectionHeight) / 2;
+          }
+          
+          window.scrollTo({
+            top: scrollPosition,
+            behavior: "smooth"
+          });
         }
       });
     </script>
