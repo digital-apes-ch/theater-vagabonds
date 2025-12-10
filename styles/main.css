@@ -211,7 +211,19 @@ h3 {
 }
 
 #nextshow {
+  padding-top: 4rem;
   padding-bottom: 10rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+#nextshow .section__inner {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 #ensemble,
@@ -424,6 +436,8 @@ text-decoration: none;
 .shows {
   display: grid;
   gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .shows article {
@@ -434,6 +448,8 @@ text-decoration: none;
   justify-content: space-between;
   align-items: center;
   gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .shows article > div {
@@ -697,6 +713,12 @@ text-decoration: none;
 
   .about-card h2 {
     font-size: 1.5rem;
+  }
+
+  #nextshow {
+    min-height: auto;
+    justify-content: flex-start;
+    padding-bottom: 4rem;
   }
 }
 
