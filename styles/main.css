@@ -250,6 +250,8 @@ h3 {
   backdrop-filter: blur(4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .about-card:hover {
@@ -319,6 +321,8 @@ h3 {
   width: 198px;
   flex-shrink: 0;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .member-card:hover {
@@ -439,6 +443,8 @@ h3 {
   align-items: center;
   gap: 1.5rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .old-shows article:nth-child(n+4) {
@@ -681,5 +687,12 @@ h3 {
     background-size: 100% auto;
     background-position: center top;
     background-repeat: repeat-y;
+  }
+
+  .about-card,
+  .member-card,
+  .old-shows article {
+    backdrop-filter: none;
+    background: rgba(17, 17, 24, 0.85);
   }
 }
