@@ -234,15 +234,14 @@ h3 {
   background-color: #3b1d0c; /* Braune Hintergrundfarbe als Fallback */
   background-image: url('../source/Background-tvt.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: #f8e9d3;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  will-change: transform;
+  /* Optimierungen für scharfe Bildqualität */
+  /* background-attachment: fixed kann zu verschwommenen Bildern führen, 
+     da Browser das Bild in einen separaten Compositing-Layer rendern */
+  /* Lösung: Keine Hardware-Beschleunigung verwenden, die die Qualität reduziert */
 }
 
 #ensemble h2,
@@ -496,6 +495,12 @@ text-decoration: none;
 .old-shows.expanded {
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: 1fr;
+  will-change: contents;
+}
+
+#oldproductions.expanded-section {
+  /* Behält den normalen Hintergrund bei - keine Überschreibung der Hintergrund-Eigenschaften */
+  /* Der Hintergrund bleibt identisch wie in der Basis-Regel */
 }
 
 .old-shows.expanded article {
@@ -731,10 +736,6 @@ text-decoration: none;
   #oldproductions {
     background-attachment: scroll;
     background-size: cover;
-    -webkit-backface-visibility: visible;
-    backface-visibility: visible;
-    transform: none;
-    -webkit-transform: none;
   }
 }
 
