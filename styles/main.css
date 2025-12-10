@@ -238,6 +238,11 @@ h3 {
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: #f8e9d3;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 #ensemble h2,
@@ -719,6 +724,17 @@ text-decoration: none;
     min-height: auto;
     justify-content: flex-start;
     padding-bottom: 4rem;
+  }
+
+  #ensemble,
+  #uns,
+  #oldproductions {
+    background-attachment: scroll;
+    background-size: cover;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+    transform: none;
+    -webkit-transform: none;
   }
 }
 
