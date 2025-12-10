@@ -213,10 +213,10 @@ h3 {
 #oldproductions {
   background-color: #3b1d0c;
   background-image: url('../source/Background-tvt.jpg');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-size: 100% auto;
+  background-position: center top;
+  background-repeat: repeat-y;
+  background-attachment: scroll;
   color: #f8e9d3;
 }
 
@@ -678,6 +678,8 @@ h3 {
   #uns,
   #oldproductions {
     background-attachment: scroll;
-    background-size: cover;
+    background-size: 100% auto;
+    background-position: center top;
+    background-repeat: repeat-y;
   }
 }
