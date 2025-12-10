@@ -573,11 +573,13 @@
       toggleButton?.addEventListener("click", () => {
         if (oldShows?.classList.contains("expanded")) {
           oldShows.classList.remove("expanded");
+          oldProductionsSection?.classList.remove("expanded-section");
           toggleButton.textContent = "Mehr anzeigen";
           // Scroll zur Überschrift "Vergangene Produktionen"
           oldProductionsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
         } else {
           oldShows?.classList.add("expanded");
+          oldProductionsSection?.classList.add("expanded-section");
           toggleButton.textContent = "Weniger anzeigen";
         }
       });
