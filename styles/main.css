@@ -151,6 +151,11 @@ h3 {
   flex: 0 0 100%;
 }
 
+.carousel__slides img.carousel__image-contain {
+  object-fit: contain;
+  background-color: #111118;
+}
+
 .carousel__control {
   position: absolute;
   top: 50%;
