@@ -32,36 +32,56 @@
         <div class="carousel__track">
           <div class="carousel__slides">
             <img
-              src="source/Carussell-Top/50281081953_9878e1241d_b.jpg"
+              src="source/Carussell-Top/TVT_2025_1.JPG"
               alt="Theaterimpression 1"
             />
             <img
-              src="source/Carussell-Top/50281082528_e49285a558_b.jpg"
+              src="source/Carussell-Top/TVT_2025_2.JPG"
               alt="Theaterimpression 2"
             />
             <img
-              src="source/Carussell-Top/50281093938_0ed8287067_b.jpg"
+              src="source/Carussell-Top/TVT_2025_3.JPG"
               alt="Theaterimpression 3"
             />
             <img
-              src="source/Carussell-Top/50281354916_3d4bb0f75b_b.jpg"
+              src="source/Carussell-Top/TVT_2025_4.JPG"
               alt="Theaterimpression 4"
             />
             <img
-              src="source/Carussell-Top/50281489542_c5e262e188_b.jpg"
+              src="source/Carussell-Top/TVT_2025_5.JPG"
               alt="Theaterimpression 5"
             />
             <img
-              src="source/Carussell-Top/50281775971_fbcc89e67f_b.jpg"
+              src="source/Carussell-Top/TVT_2025_6.JPG"
               alt="Theaterimpression 6"
             />
             <img
-              src="source/Carussell-Top/50282013547_bf7b99efb9_b.jpg"
+              src="source/Carussell-Top/TVT_2025_7.JPG"
               alt="Theaterimpression 7"
             />
             <img
-              src="source/Carussell-Top/50282013952_51c2a8e30b_b.jpg"
+              src="source/Carussell-Top/TVT_2025_8.JPG"
               alt="Theaterimpression 8"
+            />
+            <img
+              src="source/Carussell-Top/TVT_2025_9.JPG"
+              alt="Theaterimpression 9"
+            />
+            <img
+              src="source/Carussell-Top/TVT_2025_10.JPG"
+              alt="Theaterimpression 10"
+            />
+            <img
+              src="source/Carussell-Top/TVT_2025_11.JPG"
+              alt="Theaterimpression 11"
+            />
+            <img
+              src="source/Carussell-Top/TVT_2025_12.JPG"
+              alt="Theaterimpression 12"
+            />
+            <img
+              src="source/Carussell-Top/TVT_2025_13.JPG"
+              alt="Theaterimpression 13"
             />
           </div>
         </div>
@@ -506,34 +526,80 @@
       const next = document.querySelector(".carousel__control.next");
       const totalSlides = slides?.children.length || 0;
       let index = 0;
+      let autoSlide = null;
+      let hoverTimeout = null;
 
       const updateCarousel = () => {
         if (!slides) return;
         slides.style.transform = `translateX(-${index * 100}%)`;
       };
 
+      const goToNext = () => {
+        if (totalSlides > 0) {
+          index = (index + 1) % totalSlides;
+          updateCarousel();
+        }
+      };
+
+      const goToPrev = () => {
+        if (totalSlides > 0) {
+          index = (index - 1 + totalSlides) % totalSlides;
+          updateCarousel();
+        }
+      };
+
       prev?.addEventListener("click", () => {
-        index = (index - 1 + totalSlides) % totalSlides;
-        updateCarousel();
+        goToPrev();
       });
 
       next?.addEventListener("click", () => {
-        index = (index + 1) % totalSlides;
-        updateCarousel();
+        goToNext();
       });
 
-      let autoSlide = setInterval(() => {
-        next?.click();
-      }, 2000);
+      const startAutoSlide = () => {
+        if (autoSlide) {
+          clearInterval(autoSlide);
+        }
+        if (totalSlides > 0) {
+          autoSlide = setInterval(() => {
+            goToNext();
+          }, 2000);
+        }
+      };
 
-      const carousel = document.getElementById("bildkarussell");
+      const stopAutoSlide = () => {
+        if (autoSlide) {
+          clearInterval(autoSlide);
+          autoSlide = null;
+        }
+      };
 
-      carousel?.addEventListener("mouseenter", () => {
-        clearInterval(autoSlide);
+      const carouselContainer = document.querySelector(".carousel");
+
+      // Starte Auto-Slide beim Laden
+      if (totalSlides > 0) {
+        startAutoSlide();
+      }
+
+      carouselContainer?.addEventListener("mouseenter", () => {
+        // Lösche eventuellen Timeout
+        if (hoverTimeout) {
+          clearTimeout(hoverTimeout);
+        }
+        // Stoppe Auto-Slide nur nach kurzer Verzögerung (wenn Maus wirklich hovert)
+        hoverTimeout = setTimeout(() => {
+          stopAutoSlide();
+        }, 300);
       });
 
-      carousel?.addEventListener("mouseleave", () => {
-        autoSlide = setInterval(() => next?.click(), 2000);
+      carouselContainer?.addEventListener("mouseleave", () => {
+        // Lösche Timeout, falls Maus schnell wieder weg ist
+        if (hoverTimeout) {
+          clearTimeout(hoverTimeout);
+          hoverTimeout = null;
+        }
+        // Starte Auto-Slide sofort wieder
+        startAutoSlide();
       });
 
       const toggleButton = document.getElementById("toggleOldShows");
