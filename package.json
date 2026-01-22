@@ -1,16 +1,28 @@
 {
   "name": "theater-vagabunden",
   "version": "1.0.0",
-  "description": "BPB AG Website - Statischer Webserver",
+  "description": "Theater Vagabunden Tuggen - Website",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "NODE_ENV=development node server.js",
+    "production": "NODE_ENV=production node server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "theater",
+    "vagabunden",
+    "tuggen",
+    "schweiz"
+  ],
+  "author": "Theater Vagabunden Tuggen",
   "license": "ISC",
   "dependencies": {
+    "compression": "^1.8.1",
     "dotenv": "^16.4.7",
     "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }

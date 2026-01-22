@@ -1,0 +1,11 @@
+# robots.txt für Theater Vagabunden Tuggen
+# BASE_URL_PLACEHOLDER/robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: BASE_URL_PLACEHOLDER/sitemap.xml
+
+# Crawl-delay für freundlicheres Crawling
+Crawl-delay: 1
