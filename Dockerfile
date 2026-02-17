@@ -1,12 +1,28 @@
 # syntax=docker.io/docker/dockerfile:1
 
-# ---------- dependencies ----------
-FROM node:20-alpine AS deps
-WORKDIR /app
+# ---------- base ----------
+FROM node:20-alpine AS base
 
-# Kopiere nur package files für besseres Layer Caching
-COPY package*.json ./
-RUN npm ci --only=production --ignore-scripts
+# ---------- builder ----------
+FROM base AS builder
+RUN apk add --no-cache libc6-compat
+RUN npm i -g bun
+
+WORKDIR /app
+COPY . .
+
+# Build-Args für NEXT_PUBLIC_ Variablen (werden zur Build-Zeit benötigt)
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+# Build-Args als ENV setzen für Next.js Build
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+# Dependencies und Build
+RUN rm -rf node_modules
+RUN bun install
+RUN bun run build
 
 # ---------- runner ----------
 FROM node:20-alpine AS runner
@@ -14,32 +30,37 @@ WORKDIR /app
 
 # Environment
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
+
 # System user für Security
 RUN addgroup --system --gid 1001 nodejs \
- && adduser --system --uid 1001 expressapp
+ && adduser --system --uid 1001 nextjs
 
-# Kopiere Dependencies
-COPY --from=deps --chown=expressapp:nodejs /app/node_modules ./node_modules
+# Standalone server + minimal node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 
-# Kopiere Application Code und statische Assets
-COPY --chown=expressapp:nodejs . .
+# Static files
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" || exit 1
+# Public assets
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# Labels für Metadata
-LABEL org.opencontainers.image.title="Theater Vagabunden Tuggen"
-LABEL org.opencontainers.image.description="Theater Vagabunden Website"
+# Health check für Docker Swarm
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" || exit 1
+
+# Labels für Swarm Metadata
+LABEL org.opencontainers.image.title="Theater Vagabonds"
+LABEL org.opencontainers.image.description="Next.js Theater Vagabonds Application"
 LABEL org.opencontainers.image.version="1.0.0"
-LABEL maintainer="Theater Vagabunden Tuggen"
+LABEL maintainer="Digital Apes"
 
-USER expressapp
+USER nextjs
 EXPOSE 3000
 
-# Graceful shutdown support
+# Graceful shutdown support für Rolling Updates
 STOPSIGNAL SIGTERM
 
 CMD ["node", "server.js"]
