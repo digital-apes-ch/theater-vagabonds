@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  web:
+    image: theater-vagabunden:latest
+    ports:
+      - "3000:3000"
+    environment:
+      # Production Environment
+      - NODE_ENV=production
+      
+      # Website Base URL (OHNE trailing slash!)
+      - BASE_URL=https://theatervagabunden.ch
+      
+      # Ticket Links (optional)
+      - TICKET_LINK_1=#
+      - TICKET_LINK_2=#
+      - TICKET_LINK_3=#
+      - TICKET_LINK_4=#
+    
+    deploy:
+      # Anzahl Replicas für Load Balancing
+      replicas: 2
+      
+      # Restart Policy
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      
+      # Update Strategie für Zero-Downtime Deployments
+      update_config:
+        parallelism: 1          # Ein Service zur Zeit updaten
+        delay: 10s              # 10s warten zwischen Updates
+        failure_action: rollback # Bei Fehler automatisch rollback
+        order: start-first      # Neuen Container starten bevor alter gestoppt wird
+      
+      # Rollback Strategie
+      rollback_config:
+        parallelism: 1
+        delay: 5s
+        failure_action: pause
+        order: stop-first
+      
+      # Ressourcen Limits
+      resources:
+        limits:
+          cpus: '0.5'           # Max 0.5 CPU cores
+          memory: 256M          # Max 256MB RAM
+        reservations:
+          cpus: '0.1'           # Min 0.1 CPU cores
+          memory: 128M          # Min 128MB RAM
+      
+      # Placement Constraints (optional)
+      # placement:
+      #   constraints:
+      #     - node.role == worker
+      #   preferences:
+      #     - spread: node.id
+    
+    networks:
+      - theater-network
+    
+    # Health Check (wird auch vom Dockerfile definiert)
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+networks:
+  theater-network:
+    driver: overlay
+    attachable: true

@@ -3,61 +3,67 @@
 # ---------- base ----------
 FROM node:20-alpine AS base
 
-# ---------- builder ----------
-FROM base AS builder
-RUN apk add --no-cache libc6-compat
-RUN npm i -g bun
-
+# ---------- dependencies ----------
+FROM base AS deps
 WORKDIR /app
-COPY . .
 
-# Build-Args für NEXT_PUBLIC_ Variablen (werden zur Build-Zeit benötigt)
-ARG NEXT_PUBLIC_SUPABASE_URL
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+# Kopiere nur package files für besseres Caching
+COPY package*.json ./
 
-# Build-Args als ENV setzen für Next.js Build
-ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
-ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-# Dependencies und Build
-RUN rm -rf node_modules
-RUN bun install
-RUN bun run build
+# Installiere nur Production Dependencies
+RUN npm ci --only=production --ignore-scripts && \
+    npm cache clean --force
 
 # ---------- runner ----------
-FROM node:20-alpine AS runner
+FROM base AS runner
 WORKDIR /app
 
 # Environment
 ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
+# Runtime ARGs (werden zur Laufzeit benötigt)
+ARG BASE_URL
+ARG TICKET_LINK_1
+ARG TICKET_LINK_2
+ARG TICKET_LINK_3
+ARG TICKET_LINK_4
+
+# ARGs als ENV setzen
+ENV BASE_URL=${BASE_URL:-https://theatervagabunden.ch}
+ENV TICKET_LINK_1=${TICKET_LINK_1:-#}
+ENV TICKET_LINK_2=${TICKET_LINK_2:-#}
+ENV TICKET_LINK_3=${TICKET_LINK_3:-#}
+ENV TICKET_LINK_4=${TICKET_LINK_4:-#}
+
 # System user für Security
-RUN addgroup --system --gid 1001 nodejs \
- && adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 webapp
 
-# Standalone server + minimal node_modules
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+# Kopiere Dependencies aus deps Stage
+COPY --from=deps --chown=webapp:nodejs /app/node_modules ./node_modules
 
-# Static files
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# Public assets
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+# Kopiere Applikationscode
+COPY --chown=webapp:nodejs server.js ./
+COPY --chown=webapp:nodejs index.html ./
+COPY --chown=webapp:nodejs impressum.html ./
+COPY --chown=webapp:nodejs robots.txt ./
+COPY --chown=webapp:nodejs sitemap.xml ./
+COPY --chown=webapp:nodejs styles ./styles
+COPY --chown=webapp:nodejs source ./source
 
 # Health check für Docker Swarm
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" || exit 1
 
 # Labels für Swarm Metadata
-LABEL org.opencontainers.image.title="Theater Vagabonds"
-LABEL org.opencontainers.image.description="Next.js Theater Vagabonds Application"
+LABEL org.opencontainers.image.title="Theater Vagabunden Tuggen"
+LABEL org.opencontainers.image.description="Theater Vagabunden Tuggen - Website"
 LABEL org.opencontainers.image.version="1.0.0"
 LABEL maintainer="Digital Apes"
 
-USER nextjs
+USER webapp
 EXPOSE 3000
 
 # Graceful shutdown support für Rolling Updates
