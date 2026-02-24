@@ -422,6 +422,28 @@ h3 {
   flex: 1;
 }
 
+.show-schedule {
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  color: rgba(245, 244, 241, 0.95);
+}
+
+.show-schedule__date {
+  font-weight: 700;
+  margin-right: 0.25rem;
+}
+
+.show-schedule__divider {
+  color: rgba(245, 244, 241, 0.55);
+}
+
+.show-schedule__entry strong {
+  font-weight: 700;
+}
+
 .shows .meta {
   color: rgba(245, 244, 241, 0.7);
   font-size: 0.9rem;
@@ -673,6 +695,21 @@ h3 {
   .shows article .cta {
     margin-top: 0.5rem;
     align-self: flex-end;
+  }
+
+  .show-schedule {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: 0.75rem;
+  }
+
+  .show-schedule__date {
+    margin-right: 0;
+    margin-bottom: 0.1rem;
+  }
+
+  .show-schedule__divider {
+    display: none;
   }
 
   #bildkarussell {
