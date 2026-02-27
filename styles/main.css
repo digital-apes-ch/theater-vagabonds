@@ -28,6 +28,10 @@ a {
   color: inherit;
 }
 
+.email-link {
+  text-decoration: none;
+}
+
 .hero {
   min-height: 40vh;
   display: flex;
