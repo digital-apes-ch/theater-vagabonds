@@ -51,6 +51,7 @@ COPY --chown=webapp:nodejs impressum.html ./
 COPY --chown=webapp:nodejs robots.txt ./
 COPY --chown=webapp:nodejs sitemap.xml ./
 COPY --chown=webapp:nodejs styles ./styles
+COPY --chown=webapp:nodejs scripts ./scripts
 COPY --chown=webapp:nodejs source ./source
 
 # Health check für Docker Swarm
