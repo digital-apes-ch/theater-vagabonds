@@ -67,9 +67,17 @@
   let mosaicPool = [];
   let peekCurrent = 0;
 
+  // Auto-Durchlauf im Peek-Modus
+  const AUTO_MS = 3500;     // Intervall zwischen den Bildern
+  const RESUME_MS = 5000;   // Wartezeit nach Nutzer-Interaktion bis Auto-Lauf weitergeht
+  let autoTimer = null;
+  let resumeTimer = null;
+
   // ---- Mosaik ----
   function buildMosaic() {
     stopFlips();
+    stopAuto();
+    if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = null; }
     mode = "mosaic";
     container.classList.remove("gallery--peek");
     container.classList.add("gallery--mosaic");
@@ -183,7 +191,34 @@
       viewport.appendChild(btn);
     }
     requestAnimationFrame(() => scrollPeekTo(peekCurrent, false));
+    startAuto();
   }
+
+  // ---- Auto-Durchlauf (nur Peek) ----
+  function startAuto() {
+    if (mode !== "peek" || reduceMotion) return;
+    stopAuto();
+    autoTimer = setInterval(() => scrollPeekTo(peekCurrent + 1), AUTO_MS);
+  }
+
+  function stopAuto() {
+    if (autoTimer) {
+      clearInterval(autoTimer);
+      autoTimer = null;
+    }
+  }
+
+  // Bei Nutzer-Interaktion anhalten und nach kurzer Ruhe wieder aufnehmen
+  function pauseAutoTemporarily() {
+    if (mode !== "peek") return;
+    stopAuto();
+    if (resumeTimer) clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(startAuto, RESUME_MS);
+  }
+
+  ["touchstart", "pointerdown", "wheel"].forEach((ev) =>
+    viewport.addEventListener(ev, pauseAutoTemporarily, { passive: true })
+  );
 
   function markActivePeek() {
     [...viewport.children].forEach((t, i) =>
@@ -222,8 +257,8 @@
     });
   });
 
-  prevBtn.addEventListener("click", () => scrollPeekTo(peekCurrent - 1));
-  nextBtn.addEventListener("click", () => scrollPeekTo(peekCurrent + 1));
+  prevBtn.addEventListener("click", () => { scrollPeekTo(peekCurrent - 1); pauseAutoTemporarily(); });
+  nextBtn.addEventListener("click", () => { scrollPeekTo(peekCurrent + 1); pauseAutoTemporarily(); });
 
   // ---- Lightbox ----
   const lb = buildLightbox();
@@ -268,12 +303,16 @@
     showLightbox(idx);
     lb.root.hidden = false;
     document.body.style.overflow = "hidden";
+    stopAuto();
   }
 
   function closeLightbox() {
     lb.root.hidden = true;
     document.body.style.overflow = "";
-    if (mode === "peek") scrollPeekTo(lbIndex);
+    if (mode === "peek") {
+      scrollPeekTo(lbIndex);
+      startAuto();
+    }
   }
 
   document.addEventListener("keydown", (e) => {
@@ -305,10 +344,15 @@
 
   // Flips pausieren, wenn die Seite/Sektion nicht sichtbar ist (Performance)
   document.addEventListener("visibilitychange", () => {
-    if (mode !== "mosaic") return;
-    if (document.hidden) stopFlips();
-    else if (!flipTimer && !reduceMotion && mosaicPool.length) {
+    if (document.hidden) {
+      stopFlips();
+      stopAuto();
+      return;
+    }
+    if (mode === "mosaic" && !flipTimer && !reduceMotion && mosaicPool.length) {
       flipTimer = setInterval(flipRandomTile, 2200);
+    } else if (mode === "peek") {
+      startAuto();
     }
   });
 
