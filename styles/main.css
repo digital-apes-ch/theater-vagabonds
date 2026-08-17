@@ -506,9 +506,12 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
-.footer__digital-apes {
+.footer__digital-apes,
+.footer__partner {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -516,7 +519,8 @@ h3 {
   transition: opacity 0.2s ease;
 }
 
-.footer__digital-apes:hover {
+.footer__digital-apes:hover,
+.footer__partner:hover {
   opacity: 0.8;
 }
 
@@ -555,6 +559,8 @@ h3 {
     order: 3;
     justify-content: center;
     width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
   }
   
   .footer__text {
